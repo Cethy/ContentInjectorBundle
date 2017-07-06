@@ -1,0 +1,22 @@
+services:
+    cethyworks_content_injector.simple_injector:
+        class: Cethyworks\ContentInjector\Injector\SimpleInjector
+
+
+    cethyworks_content_injector.form_type.factory:
+        class: Cethyworks\ContentInjectorBundle\Factory\TwigContentInjectorFormTypeFactory
+        arguments:
+            - "@cethyworks_content_injector.listener.factory"
+            - "@cethyworks_content_injector.listener.registerer"
+
+    cethyworks_content_injector.listener.factory:
+        class: Cethyworks\ContentInjectorBundle\Factory\TwigContentInjectorListenerFactory
+        arguments:
+            - "@cethyworks_content_injector.simple_injector"
+            - "@twig"
+
+
+    cethyworks_content_injector.listener.registerer:
+        class: Cethyworks\ContentInjectorBundle\Registerer\ListenerRegisterer
+        arguments:
+            - "@event_dispatcher"
