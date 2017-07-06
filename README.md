@@ -4,6 +4,8 @@ Allow content injection before the app send the response to the client.
 
 Provides factory & abstract classes to build `formType` & other Objects capable of injecting content in Response (javascript for example).
 
+[![CircleCI](https://circleci.com/gh/Cethy/ContentInjectorBundle/tree/master.svg?style=shield)](https://circleci.com/gh/Cethy/ContentInjectorBundle/tree/master)
+
 ## Provides
 ### `kernel.response` Listeners
 #### `SimpleContentInjectorListener`
@@ -89,6 +91,3 @@ Register it as a service :
                 - { name: form.type, alias: example_type }
 
 @example Cethyworks\GooglePlaceAutocompleteBundle
-
-## Todo
-- composer.json
