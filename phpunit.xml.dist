@@ -15,17 +15,13 @@
 
     <testsuites>
         <testsuite name="project">
-            <directory>Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>.</directory>
-            <exclude>var</exclude>
-            <exclude>Test</exclude>
-            <exclude>Tests</exclude>
-            <exclude>vendor</exclude>
+            <directory>src</directory>
         </whitelist>
     </filter>
 </phpunit>

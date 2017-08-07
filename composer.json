@@ -29,6 +29,9 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Cethyworks\\ContentInjectorBundle\\": "" }
+        "psr-4": { "Cethyworks\\ContentInjectorBundle\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Cethyworks\\ContentInjectorBundle\\Tests\\": "tests/" }
     }
 }

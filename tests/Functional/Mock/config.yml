@@ -2,3 +2,8 @@ framework:
     secret: 'foo'
     templating:
         engines: ['twig']
+
+twig:
+    paths:
+      '%kernel.root_dir%/template': ~
+

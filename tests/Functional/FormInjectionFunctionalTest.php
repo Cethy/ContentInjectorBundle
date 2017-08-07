@@ -4,11 +4,9 @@ namespace Cethyworks\ContentInjectorBundle\Tests\Functional;
 
 use Cethyworks\ContentInjectorBundle\Tests\Functional\Mock\Form\FooInjectJsType;
 use Cethyworks\ContentInjectorBundle\Tests\Functional\Mock\MockKernel;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;

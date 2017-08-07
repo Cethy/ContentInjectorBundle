@@ -11,7 +11,7 @@ class FooInjectJsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'injector' => [ 'template' => '@CethyworksContentInjectorBundle/Tests/Functional/Mock/template/foo_inject_js_type.html.twig' ]
+            'injector' => [ 'template' => 'foo_inject_js_type.html.twig' ]
         ));
     }
 
