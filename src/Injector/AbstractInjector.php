@@ -42,12 +42,12 @@ abstract class AbstractInjector implements InjectorInterface
         {
             $posrFunction = 'mb_strpos';
             $substrFunction = 'mb_substr';
-        }
+        } // @codeCoverageIgnoreStart
         else
         {
             $posrFunction = 'strpos';
             $substrFunction = 'substr';
-        }
+        } // @codeCoverageIgnoreEnd
 
         $pos = $posrFunction($contentToModify, $this->injectBefore);
         if (false !== $pos)

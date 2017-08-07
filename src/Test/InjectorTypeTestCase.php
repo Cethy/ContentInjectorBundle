@@ -8,6 +8,9 @@ use Cethyworks\ContentInjectorBundle\Form\Extension\InjectorAwareTypeExtension;
 use Symfony\Component\Form\FormExtensionInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InjectorTypeTestCase extends TypeTestCase
 {
     protected $commandFactory;
