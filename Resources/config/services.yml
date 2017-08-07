@@ -1,22 +1,16 @@
 services:
-    cethyworks_content_injector.simple_injector:
-        class: Cethyworks\ContentInjector\Injector\SimpleInjector
+    Cethyworks\ContentInjectorBundle\EventSubscriber\ContentInjectorSubscriber:
+        arguments: [ "@Cethyworks\\ContentInjectorBundle\\Injector\\BodyEndInjector" ]
+        tags: [ { name: "kernel.event_subscriber" } ]
 
+    Cethyworks\ContentInjectorBundle\Injector\BodyEndInjector: {}
 
-    cethyworks_content_injector.form_type.factory:
-        class: Cethyworks\ContentInjectorBundle\Factory\TwigContentInjectorFormTypeFactory
+    Cethyworks\ContentInjectorBundle\Command\Factory\TwigFormCommandFactory:
+        arguments: [ "@twig" ]
+
+    Cethyworks\ContentInjectorBundle\Form\Extension\InjectorAwareTypeExtension:
         arguments:
-            - "@cethyworks_content_injector.listener.factory"
-            - "@cethyworks_content_injector.listener.registerer"
-
-    cethyworks_content_injector.listener.factory:
-        class: Cethyworks\ContentInjectorBundle\Factory\TwigContentInjectorListenerFactory
-        arguments:
-            - "@cethyworks_content_injector.simple_injector"
-            - "@twig"
-
-
-    cethyworks_content_injector.listener.registerer:
-        class: Cethyworks\ContentInjectorBundle\Registerer\ListenerRegisterer
-        arguments:
-            - "@event_dispatcher"
+            - "@Cethyworks\\ContentInjectorBundle\\Command\\Factory\\TwigFormCommandFactory"
+            - "@Cethyworks\\ContentInjectorBundle\\EventSubscriber\\ContentInjectorSubscriber"
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }

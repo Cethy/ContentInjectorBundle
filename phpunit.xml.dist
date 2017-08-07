@@ -14,18 +14,18 @@
     </php>
 
     <testsuites>
-        <testsuite name="content-injector-bundle">
+        <testsuite name="project">
             <directory>Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>Factory</directory>
-            <directory>Form</directory>
-            <directory>Listener</directory>
-            <directory>Registerer</directory>
-            <directory>Injector</directory>
+            <directory>.</directory>
+            <exclude>var</exclude>
+            <exclude>Test</exclude>
+            <exclude>Tests</exclude>
+            <exclude>vendor</exclude>
         </whitelist>
     </filter>
 </phpunit>

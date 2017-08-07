@@ -1,39 +1,134 @@
 Cethyworks\ContentInjectorBundle
 ===
-Allow content injection before the app send the response to the client.
+Allow effective content injection before the app sends the response to the client.
 
-Provides factory & abstract classes to build `formType` & other Objects capable of injecting content in Response (javascript for example).
+It uses a global subscriber which will inject content from collected `InjectorCommands` when `kernel.response` event is fired.
+The `InjectorCommands` can be a simple `callable` returning a string or be as complex as a rendered twig template with data.
+
+The bundle provides helpers to inject simple text, twig templates and `FormView` aware commands.
 
 [![CircleCI](https://circleci.com/gh/Cethy/ContentInjectorBundle/tree/master.svg?style=shield)](https://circleci.com/gh/Cethy/ContentInjectorBundle/tree/master)
 
-## Provides
-### `kernel.response` Listeners
-#### `SimpleContentInjectorListener`
-Register a `ContentTransformer` & an `Injector` to inject content into `Response`.
- 
-#### `SimpleFormViewAwareListener`
-Specific listener used with formTypes to pass their `FormViews` to the template injected into `Response`.
+## Install
 
-@see FormTypes below.
+    composer require cethyworks/content-injector-bundle
 
-### FormType
-#### `AbstractFormViewAwareInjectorType`
-Abstract class handling the listener registration.
+`AppKernel.php`
+
+	class AppKernel extends Kernel
+	{
+		registerBundles()
+		{
+			return [
+				// ...
+				new Cethyworks\ContentInjectorBundle\CethyworksContentInjectorBundle()
+			];
+		}
+	}
+
+## How to use
+The global subscriber is configured out of the box.
+
+You just need to register one or more `InjectorCommand` :
+
+    $subscriber = $container->get(ContentInjectorSubscriber::class);
+	$subscriber->regiterCommand(function(){ return 'inject_me'; });
+	
+### With twig template
+
+	$command = ( new TwigCommand($container->get('twig')) )
+		->setTemplate('@AppBundle\Resources/assets/twig/foo.html.twig')
+		->setData(['foo' => 'bar']);
+    $subscriber = $container->get(ContentInjectorSubscriber::class)->regiterCommand($command);
+
+
+### With FormType
+The bundle provides a `TypeExtension` "extending" `FormType` (virtually all forms) adding a `injector` option allowing the configuration of an injector aware of the FormType's `FormView`. It ca be used like this :
+
+`AppInjectJsType.php`
+
+	class AppInjectJsType extends AbstractType
+    {
+        public function configureOptions(OptionsResolver $resolver)
+        {
+            $resolver->setDefaults(array(
+                'injector' => [ 
+                	'template' => '@AppBundle/Resources/assets/twig/app_inject_js_type.html.twig' ]
+            ));
+        }
+    
+        public function getBlockPrefix()
+        {
+            return 'my_form_id';
+        }
+    
+        public function getParent()
+        {
+            return EntityType::class;
+        }
+    }
+
+`app_inject_js_type.html.twig`	
+
+	<script>
+        var formId = "{{ form_view.vars['id'] }}";
+    
+        // do something to your form
+    </script>
+
+
+
+
+## What's in the box ?
+### EventSubscriber
+- `Cethyworks\ContentInjectorBundle\EventSubscriber\ContentInjectorSubscriber($injector)`
+
+Collects `InjectorCommands`, execute and inject them into the `Response` when `kernel.response` event is fired.
+
+### Commands
+- `Cethyworks\ContentInjectorBundle\Command\CommandInterface`
+
+Command interface.
+
+
+- `Cethyworks\ContentInjectorBundle\Command\TextCommand($text)`
+
+Simple Text Command.
+
+
+- `Cethyworks\ContentInjectorBundle\Command\TwigCommand($twig)->setTemplate($template)->setData($data)`
+
+Twig Command, render `$template` with `$data`.
+
+
+### FormExtension
+- `Cethyworks\ContentInjectorBundle\Form\Extension\InjectorAwareTypeExtension($commandFactory, $responseSubscriber)`
+
+Enable the `injector` form option.
+
+@see section **How to / With Form" ""Type** above.
+
 
 ### Factories
-#### `TwigContentInjectorListenerFactory`
-Handle the heavy lifting around creating a `SimpleContentInjectorListener` with `TwigContentTransformer`.
+- `Cethyworks\ContentInjectorBundle\Command\Factory\TwigFormCommandFactory`
 
-Register into services as `cethyworks_content_injector.listener.factory`
+Used internally by `InjectorAwareTypeExtension`, create TwigCommands aware of `FormView`.
 
-@see How to use below.
 
-#### `TwigContentInjectorFormTypeFactory`
-Handle the heavy lifting around creating a `AbstractFormViewAwareInjectorType` with `SimpleContentInjectorListener` & `TwigContentTransformer`.
+### Injectors
+- `Cethyworks\ContentInjectorBundle\Injector\InjectorInterface`
 
-Register into services as `cethyworks_content_injector.form_type.factory`
+Injector interface.
 
-@see How to use below.
+- `Cethyworks\ContentInjectorBundle\Injector\BodyEndInjector`
+
+Injects just before `</body>` tag.
+
+### Test helper
+???
+
+### todo
+- Custom `@inject` annotation (?)
 
 
 ### Test Helpers
@@ -42,52 +137,3 @@ Provides some shortcuts to test `AbstractFormViewAwareInjectorType` formTypes.
 
 #### `FormViewAwareInjectorTypeTestCase`
 Is a base class to test `AbstractFormViewAwareInjectorType` formTypes.
-
-## How to use
-### Registering a listener to inject some content
-Create your listener :
-
-    services:
-        # Listener
-        example.content_injector.listener:
-            class: Cethyworks\ContentInjectorBundle\Listener\SimpleContentInjectorListener
-            factory: cethyworks_content_injector.listener.factory:createListener
-            arguments:
-                - "Cethyworks\\ContentInjectorBundle\\Listener\\SimpleContentInjectorListener"
-                - "@@ExampleBundle/Resources/assets/twig/template_to_inject.html.twig"
-
-Register the listener into the event_dispatcher (wherever you want) :
-    
-    $listener = $container->get('example.content_injector.listener');
-    /** @var ListenerRegisterer $registerer */
-    $registerer = $container->get('cethyworks_content_injector.listener.registerer');
-    $registerer->addListener([$listener, 'onKernelResponse']);
-
-@example Cethyworks\GoogleMapDisplayBundle
-
-### Registering a FormViewAwareInjectorType
-Create your formView :
-
-    namespace ExampleBundle\Form;
-    
-    use Cethyworks\ContentInjectorBundle\Form\AbstractFormViewAwareInjectorType;
-    
-    class ExampleType extends AbstractFormViewAwareInjectorType
-    {
-        // ...
-    }
-
-Register it as a service :
-
-    services:
-        # Example Type
-        example.type:
-            class: ExampleBundle\Form\ExampleType
-            factory: cethyworks_content_injector.form_type.factory:createFormType
-            arguments:
-                - "ExampleBundle\\Form\\ExampleType"
-                - "@@ExampleBundle/Resources/assets/twig/template_to_inject.html.twig"
-            tags:
-                - { name: form.type, alias: example_type }
-
-@example Cethyworks\GooglePlaceAutocompleteBundle
