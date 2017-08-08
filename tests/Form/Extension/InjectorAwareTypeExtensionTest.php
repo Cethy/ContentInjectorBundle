@@ -83,18 +83,12 @@ class InjectorAwareTypeExtensionTest extends TestCase
         $this->extension->buildView($view, $form, $options);
     }
 
-
-    /**
-     * Configure & add listener on the dispatcher
-     *
-     * @param FormView $view
-     */
+    
     protected function setUp()
     {
         $this->commandFactory = $this->getMockBuilder(FormCommandFactoryInterface::class)->disableOriginalConstructor()->getMock();
         $this->subscriber = $this->getMockBuilder(ContentInjectorSubscriber::class)->disableOriginalConstructor()->getMock();
 
         $this->extension = new InjectorAwareTypeExtension($this->commandFactory, $this->subscriber);
-
     }
 }

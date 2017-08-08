@@ -1,12 +1,12 @@
 <?php
 
-    namespace Cethyworks\ContentInjectorBundle\Command\Factory;
+namespace Cethyworks\ContentInjectorBundle\Command\Factory;
 
-    use Cethyworks\ContentInjectorBundle\Command\TwigCommand;
-    use Symfony\Component\Form\FormView;
-    use Twig_Environment;
+use Cethyworks\ContentInjectorBundle\Command\TwigCommand;
+use Symfony\Component\Form\FormView;
+use Twig_Environment;
 
-    class TwigFormCommandFactory implements FormCommandFactoryInterface
+class TwigFormCommandFactory implements FormCommandFactoryInterface
 {
     /**
      * @var Twig_Environment

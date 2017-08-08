@@ -125,15 +125,9 @@ Injector interface.
 Injects just before `</body>` tag.
 
 ### Test helper
-???
+- `Cethyworks\ContentInjectorBundle\Test\InjectorTypeTestCase`
+ 
+Extends `TypeTestCase` and initialize the `InjectorAwareTypeExtension` extension.
 
 ### todo
 - Custom `@inject` annotation (?)
-
-
-### Test Helpers
-#### `FormViewAwareInjectorTypeTestCaseHelper`
-Provides some shortcuts to test `AbstractFormViewAwareInjectorType` formTypes.
-
-#### `FormViewAwareInjectorTypeTestCase`
-Is a base class to test `AbstractFormViewAwareInjectorType` formTypes.

@@ -6,6 +6,7 @@ use Cethyworks\ContentInjectorBundle\Command\Factory\FormCommandFactoryInterface
 use Cethyworks\ContentInjectorBundle\EventSubscriber\ContentInjectorSubscriber;
 use Cethyworks\ContentInjectorBundle\Form\Extension\InjectorAwareTypeExtension;
 use Symfony\Component\Form\FormExtensionInterface;
+use Symfony\Component\Form\FormTypeExtensionInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
@@ -13,8 +14,10 @@ use Symfony\Component\Form\Test\TypeTestCase;
  */
 class InjectorTypeTestCase extends TypeTestCase
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject|FormCommandFactoryInterface */
     protected $commandFactory;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ContentInjectorSubscriber */
     protected $subscriber;
 
     public function setUp()
@@ -26,9 +29,9 @@ class InjectorTypeTestCase extends TypeTestCase
     }
 
     /**
-     * @return FormExtensionInterface[]
+     * @return FormTypeExtensionInterface[]
      */
-    protected function getExtensions()
+    protected function getTypeExtensions()
     {
         return [
             new InjectorAwareTypeExtension($this->commandFactory, $this->subscriber),
