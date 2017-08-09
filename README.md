@@ -36,11 +36,8 @@ You just need to register one or more `InjectorCommand` :
 	
 ### With twig template
 
-	$command = ( new TwigCommand($container->get('twig')) )
-		->setTemplate('@AppBundle\Resources/assets/twig/foo.html.twig')
-		->setData(['foo' => 'bar']);
-    $subscriber = $container->get(ContentInjectorSubscriber::class)->regiterCommand($command);
-
+	$commandHandler = $container->get(TwigCommandHandler::class);
+	$commandHandler->registerCommand('@AppBundle\Resources/assets/twig/foo.html.twig', ['foo' => 'bar']);
 
 ### With FormType
 The bundle provides a `TypeExtension` "extending" `FormType` (virtually all forms) adding a `injector` option allowing the configuration of an injector aware of the FormType's `FormView`. It ca be used like this :
@@ -126,8 +123,10 @@ Injects just before `</body>` tag.
 
 ### Test helper
 - `Cethyworks\ContentInjectorBundle\Test\InjectorTypeTestCase`
+
+### Command Handler
+- `Cethyworks\ContentInjectorBundle\Command\Handler\TwigCommandHandler`
+
+Shorcut service to create & register a `TwigCommand`.
  
 Extends `TypeTestCase` and initialize the `InjectorAwareTypeExtension` extension.
-
-### todo
-- Custom `@inject` annotation (?)

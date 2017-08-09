@@ -1,12 +1,9 @@
 services:
-    Cethyworks\ContentInjectorBundle\EventSubscriber\ContentInjectorSubscriber:
-        arguments: [ "@Cethyworks\\ContentInjectorBundle\\Injector\\BodyEndInjector" ]
-        tags: [ { name: "kernel.event_subscriber" } ]
-
     Cethyworks\ContentInjectorBundle\Injector\BodyEndInjector: {}
 
     Cethyworks\ContentInjectorBundle\Command\Factory\TwigFormCommandFactory:
-        arguments: [ "@twig" ]
+        arguments:
+            - "@twig"
 
     Cethyworks\ContentInjectorBundle\Form\Extension\InjectorAwareTypeExtension:
         arguments:
@@ -14,3 +11,14 @@ services:
             - "@Cethyworks\\ContentInjectorBundle\\EventSubscriber\\ContentInjectorSubscriber"
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+
+    Cethyworks\ContentInjectorBundle\Command\Handler\TwigCommandHandler:
+        arguments:
+            - "@twig"
+            - "@Cethyworks\\ContentInjectorBundle\\EventSubscriber\\ContentInjectorSubscriber"
+
+    Cethyworks\ContentInjectorBundle\EventSubscriber\ContentInjectorSubscriber:
+        arguments:
+            - "@Cethyworks\\ContentInjectorBundle\\Injector\\BodyEndInjector"
+        tags:
+            - { name: "kernel.event_subscriber" }

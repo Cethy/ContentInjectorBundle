@@ -19,7 +19,7 @@ class TwigCommand implements DataAwareCommandInterface, TemplateAwareCommandInte
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * TwigCommand constructor.
