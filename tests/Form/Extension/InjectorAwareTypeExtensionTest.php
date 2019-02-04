@@ -8,7 +8,7 @@ use Cethyworks\ContentInjectorBundle\EventSubscriber\ContentInjectorSubscriber;
 use Cethyworks\ContentInjectorBundle\Form\Extension\InjectorAwareTypeExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -60,7 +60,7 @@ class InjectorAwareTypeExtensionTest extends TestCase
         $options = ['injector' => false];
 
         $view = new FormView();
-        $form = $this->getMockBuilder(FormInterface::class)->disableOriginalConstructor()->getMock();
+        $form = $this->getMockBuilder(Form::class)->disableOriginalConstructor()->getMock();
 
         $this->commandFactory->expects($this->never())->method('create');
         $this->subscriber->expects($this->never())->method('registerCommand');
@@ -73,7 +73,7 @@ class InjectorAwareTypeExtensionTest extends TestCase
         $options = ['injector' => ['template' => 'foo']];
 
         $view = new FormView();
-        $form = $this->getMockBuilder(FormInterface::class)->disableOriginalConstructor()->getMock();
+        $form = $this->getMockBuilder(Form::class)->disableOriginalConstructor()->getMock();
         $command = $this->getMockBuilder(TwigCommand::class)->disableOriginalConstructor()->getMock();
 
         $this->commandFactory->expects($this->once())->method('create')->with($view, $options['injector'])->willReturn($command);
